@@ -1,0 +1,52 @@
+---
+title: "Motor Trend Project"
+author: "Andrew Rosa"
+date: "11/12/2016"
+output: 
+        html_document:
+                includes:
+                        in_header: head.html
+                css: style.css
+---
+
+### Background
+
+The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project are to answer if  an automatic or manual transmission better for MPG, and How different is the MPG between automatic manual transmission? 
+
+### First
+
+We should take a look at the data. No need to load the data-set into the global environment, as R already has it. We'll use the function `str()` to get an overlook of the data.
+
+```{r}
+str(mtcars)
+```
+
+We can see that all of the variables in the data-set are numeric. Transmission should be a cator though: 0 marks automatic, and 1 marks manual. We'll need to fix this. We also don't see the names of the automobiles. This is because they are the row names of the data-set. Let's take a look at this as well. 
+
+```{r}
+mtcars$am <- factor(mtcars$am)
+rownames(mtcars)
+```
+
+### Exploritory Visualization
+
+Lets take a look at some histrograms to get an idea of the distrobutions. 
+
+```{r echo=FALSE, warning=FALSE}
+library(ggplot2)
+plot_1 <- ggplot(mtcars, aes(x = mpg, fill  = I("#F8766D"))) +
+        geom_histogram(breaks = seq(10, 35, by = 2))
+
+
+plot_1
+```
+
+
+
+
+
+
+
+
+
+

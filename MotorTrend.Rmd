@@ -92,19 +92,33 @@ grid.arrange(plot_9, plot_10, plot_11, plot_12, plot_13, plot_14, ncol = 3)
 ```
 
 ```{r echo=FALSE}
-plot_15 <- ggplot(mtcars, aes(x = drat, y = mpg)) +
-                geom_point()
-plot_16 <- ggplot(mtcars, aes(x = drat, y = log(mpg))) +
-                geom_point()
-plot_17 <- ggplot(mtcars, aes(x = log(drat), y = log(mpg))) +
-                geom_point()
-plot_18 <- ggplot(mtcars, aes(x = wt, y = mpg)) +
-                geom_point()
-plot_19 <- ggplot(mtcars, aes(x = wt, y = log(mpg))) +
-                geom_point()
-plot_20 <- ggplot(mtcars, aes(x = log(wt), y = log(mpg))) +
-                geom_point()
-grid.arrange(plot_15, plot_16, plot_17, plot_18, plot_19, plot_20, ncol = 3)
+
+var_names <- c("drat", "wt")
+plot_list <- list()
+for(i in var_names){
+       temp_plot <- ggplot(mtcars, aes_string(x = i)) +
+                        geom_point(aes(y = mpg)) +
+                        annotate("text", x=Inf, y = Inf,
+                                label = paste0("cor: ", 
+                                        round(cor(mtcars[,i], mtcars$mpg), 2)),
+                                vjust=1, hjust=1, col = "#F8766D")
+       temp_plot2 <- ggplot(mtcars, aes_string(x = i)) +
+                        geom_point(aes(y = log(mpg))) +
+                        annotate("text", x=Inf, y = Inf,
+                                label = paste0("cor: ", 
+                                        round(cor(mtcars[,i], log(mtcars$mpg)), 2)),
+                                vjust=1, hjust=1, col = "#F8766D")
+       temp_plot3 <- ggplot(mtcars, aes_string(x = sprintf("log(%s)", i))) +
+                        geom_point(aes(y = log(mpg))) +
+                        annotate("text", x=Inf, y = Inf,
+                                label = paste0("cor: ", 
+                                        round(cor(log(mtcars[,i]), log(mtcars$mpg)), 2)),
+                                vjust=1, hjust=1, col = "#F8766D")
+       plot_list[[paste0(i, 1)]] <- temp_plot
+       plot_list[[paste0(i, 2)]] <- temp_plot2
+       plot_list[[paste0(i, 3)]] <- temp_plot3
+}
+grid.arrange(grobs = plot_list, ncol = 3)
 ```
 
 ```{r}

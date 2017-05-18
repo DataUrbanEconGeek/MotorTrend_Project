@@ -37,23 +37,23 @@ library(ggplot2)
 library(gridExtra)
 
 plot_1 <- ggplot(mtcars, aes(x = mpg, fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_2 <- ggplot(mtcars, aes(x = disp, fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_3 <- ggplot(mtcars, aes(x = hp, fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_4 <- ggplot(mtcars, aes(x = drat, fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_5 <- ggplot(mtcars, aes(x = wt, fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 grid.arrange(plot_1, plot_2, plot_3, plot_4, plot_5, ncol = 2)
@@ -61,21 +61,21 @@ grid.arrange(plot_1, plot_2, plot_3, plot_4, plot_5, ncol = 2)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 plot_6 <- ggplot(mtcars, aes(x = log(mpg), fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_7 <- ggplot(mtcars, aes(x = log(hp), fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 plot_8 <- ggplot(mtcars, aes(x = log(wt), fill  = I("#F8766D"))) +
-                geom_density(fill = I("#619CFF"), col = "#619CFF", alpha = 0.5) +
+                geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
                 geom_histogram(aes(y = ..density..), alpha = 0.9)
 
 grid.arrange(plot_6, plot_7, plot_8, ncol = 2)
 ```
 
-```{r}
+```{r echo=FALSE}
 plot_9 <- ggplot(mtcars, aes(x = disp, y = mpg)) +
                 geom_point()
 plot_10 <- ggplot(mtcars, aes(x = disp, y = log(mpg))) +
@@ -88,19 +88,37 @@ plot_13 <- ggplot(mtcars, aes(x = hp, y = log(mpg))) +
                 geom_point()
 plot_14 <- ggplot(mtcars, aes(x = log(hp), y = log(mpg))) +
                 geom_point()
+grid.arrange(plot_9, plot_10, plot_11, plot_12, plot_13, plot_14, ncol = 3)
+```
+
+```{r echo=FALSE}
 plot_15 <- ggplot(mtcars, aes(x = drat, y = mpg)) +
                 geom_point()
 plot_16 <- ggplot(mtcars, aes(x = drat, y = log(mpg))) +
                 geom_point()
 plot_17 <- ggplot(mtcars, aes(x = log(drat), y = log(mpg))) +
                 geom_point()
-grid.arrange(plot_9, plot_10, plot_11, plot_12, plot_13, plot_14, plot_15, plot_16, plot_17, ncol = 3)
+plot_18 <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+                geom_point()
+plot_19 <- ggplot(mtcars, aes(x = wt, y = log(mpg))) +
+                geom_point()
+plot_20 <- ggplot(mtcars, aes(x = log(wt), y = log(mpg))) +
+                geom_point()
+grid.arrange(plot_15, plot_16, plot_17, plot_18, plot_19, plot_20, ncol = 3)
 ```
 
 ```{r}
-plot_20 <- ggplot(mtcars, aes(x = cyl, y = mpg)) +
-                geom_point()
-plot_20
+plot_30 <- ggplot(mtcars, aes(x = factor(cyl), y = mpg)) +
+                geom_boxplot()
+plot_31 <- ggplot(mtcars, aes(x = factor(vs), y = mpg)) +
+                geom_boxplot()
+plot_32 <- ggplot(mtcars, aes(x = factor(am), y = mpg)) +
+                geom_boxplot()
+plot_33 <- ggplot(mtcars, aes(x = factor(gear), y = mpg)) +
+                geom_boxplot()
+plot_34 <- ggplot(mtcars, aes(x = factor(carb), y = mpg)) +
+                geom_boxplot()
+grid.arrange(plot_30, plot_31, plot_32, plot_33, plot_34, ncol = 2)
 ```
 
 

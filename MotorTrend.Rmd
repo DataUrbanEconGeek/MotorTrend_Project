@@ -143,7 +143,7 @@ These boxplots make it really easy to understand the trends of the explanitory v
 
 ```{r}
 
-model_1 <- lm(mpg ~ disp + hp + wt, data = mtcars)
+model_1 <- lm(mpg ~ cyl + disp + hp + drat + wt + vs + am + gear + carb, data = mtcars)
 summary(model_1)
 prediction_1 <- predict(model_1, newdata = mtcars)
 pred_diff_1 <- with(mtcars, mpg - prediction_1)
@@ -151,7 +151,7 @@ mean(pred_diff_1 ^ 2)
 ```
 
 ```{r}
-model_2 <- lm(mpg ~ log(disp) + log(hp) + log(wt), data = mtcars)
+model_2 <- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)
 summary(model_2)
 prediction_2 <- predict(model_2, newdata = mtcars)
 pred_diff_2 <- with(mtcars, mpg - prediction_2)
@@ -159,11 +159,11 @@ mean(pred_diff_2 ^ 2)
 ```
 
 ```{r}
-model_3 <- lm(mpg ~ log(disp) * log(hp) + log(wt), data = mtcars)
+model_3 <- lm(mpg ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
 summary(model_3)
 prediction_3 <- predict(model_3, newdata = mtcars)
-pred_diff_3 <- with(mtcars, mpg - prediction_2)
-mean(pred_diff_2 ^ 2)
+pred_diff_3 <- with(mtcars, mpg - prediction_3)
+mean(pred_diff_3 ^ 2)
 ```
 
 

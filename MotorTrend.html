@@ -183,85 +183,114 @@ rownames(mtcars)</code></pre>
 </div>
 <div id="multiple-regression" class="section level3">
 <h3>Multiple Regression</h3>
-<pre class="r"><code>model_1 &lt;- lm(mpg ~ disp + hp + wt, data = mtcars)
+<pre class="r"><code>model_1 &lt;- lm(mpg ~ cyl + disp + hp + drat + wt + vs + am + gear + carb, data = mtcars)
 summary(model_1)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = mpg ~ disp + hp + wt, data = mtcars)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -3.891 -1.640 -0.172  1.061  5.861 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 37.105505   2.110815  17.579  &lt; 2e-16 ***
-## disp        -0.000937   0.010350  -0.091  0.92851    
-## hp          -0.031157   0.011436  -2.724  0.01097 *  
-## wt          -3.800891   1.066191  -3.565  0.00133 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 2.639 on 28 degrees of freedom
-## Multiple R-squared:  0.8268, Adjusted R-squared:  0.8083 
-## F-statistic: 44.57 on 3 and 28 DF,  p-value: 8.65e-11</code></pre>
-<pre class="r"><code>prediction_1 &lt;- predict(model_1, newdata = mtcars)
-pred_diff_1 &lt;- with(mtcars, mpg - prediction_1)
-mean(pred_diff_1 ^ 2)</code></pre>
-<pre><code>## [1] 6.093459</code></pre>
-<pre class="r"><code>model_2 &lt;- lm(mpg ~ log(disp) + log(hp) + log(wt), data = mtcars)
-summary(model_2)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = mpg ~ log(disp) + log(hp) + log(wt), data = mtcars)
+## lm(formula = mpg ~ cyl + disp + hp + drat + wt + vs + am + gear + 
+##     carb, data = mtcars)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -2.8237 -1.5407 -0.6512  1.0536  4.6492 
+## -3.9116 -1.5674 -0.2339  1.4742  5.2483 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 28.514875  11.992102   2.378   0.0265 *
+## cyl         -0.433807   1.010821  -0.429   0.6720  
+## disp         0.007608   0.017216   0.442   0.6629  
+## hp          -0.024133   0.021769  -1.109   0.2796  
+## drat         0.720339   1.643997   0.438   0.6655  
+## wt          -2.636203   1.642528  -1.605   0.1228  
+## vs           1.181162   1.970789   0.599   0.5551  
+## am1          1.887310   1.989726   0.949   0.3532  
+## gear         0.519607   1.497197   0.347   0.7318  
+## carb        -0.449539   0.803027  -0.560   0.5813  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.666 on 22 degrees of freedom
+## Multiple R-squared:  0.8611, Adjusted R-squared:  0.8043 
+## F-statistic: 15.16 on 9 and 22 DF,  p-value: 1.658e-07</code></pre>
+<pre class="r"><code>prediction_1 &lt;- predict(model_1, newdata = mtcars)
+pred_diff_1 &lt;- with(mtcars, mpg - prediction_1)
+mean(pred_diff_1 ^ 2)</code></pre>
+<pre><code>## [1] 4.886205</code></pre>
+<pre class="r"><code>model_2 &lt;- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)
+summary(model_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + 
+##     vs + am + gear + carb, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.9151 -1.4789 -0.4502  1.0758  3.9896 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   60.274      5.322  11.325 5.77e-12 ***
-## log(disp)     -1.427      2.011  -0.710  0.48372    
-## log(hp)       -4.418      1.597  -2.766  0.00993 ** 
-## log(wt)       -9.871      2.772  -3.561  0.00135 ** 
+## (Intercept)  56.5512    13.6472   4.144 0.000425 ***
+## cyl           0.6350     0.9085   0.699 0.491940    
+## log(disp)    -2.9726     3.4723  -0.856 0.401177    
+## log(hp)      -4.1365     2.7291  -1.516 0.143835    
+## drat         -0.0978     1.4309  -0.068 0.946130    
+## log(wt)      -6.7490     4.1206  -1.638 0.115669    
+## vs            0.2723     1.6655   0.163 0.871626    
+## am1           0.2604     1.8225   0.143 0.887684    
+## gear          1.3659     1.3240   1.032 0.313456    
+## carb         -0.6489     0.6014  -1.079 0.292271    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.102 on 28 degrees of freedom
-## Multiple R-squared:  0.8901, Adjusted R-squared:  0.8783 
-## F-statistic: 75.59 on 3 and 28 DF,  p-value: 1.541e-13</code></pre>
+## Residual standard error: 2.285 on 22 degrees of freedom
+## Multiple R-squared:  0.898,  Adjusted R-squared:  0.8562 
+## F-statistic: 21.51 on 9 and 22 DF,  p-value: 6.38e-09</code></pre>
 <pre class="r"><code>prediction_2 &lt;- predict(model_2, newdata = mtcars)
 pred_diff_2 &lt;- with(mtcars, mpg - prediction_2)
 mean(pred_diff_2 ^ 2)</code></pre>
-<pre><code>## [1] 3.867535</code></pre>
-<pre class="r"><code>model_3 &lt;- lm(mpg ~ log(disp) * log(hp) + log(wt), data = mtcars)
+<pre><code>## [1] 3.590276</code></pre>
+<pre class="r"><code>model_3 &lt;- lm(mpg ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
 summary(model_3)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = mpg ~ log(disp) * log(hp) + log(wt), data = mtcars)
+## lm(formula = mpg ~ cyl + log(disp) * log(hp) * log(wt) * drat + 
+##     vs + am + gear + carb, data = mtcars)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -2.871 -1.491 -0.414  1.240  3.736 
+##     Min      1Q  Median      3Q     Max 
+## -2.2846 -0.5429  0.1042  0.6782  2.5353 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)        128.072     40.589   3.155  0.00391 **
-## log(disp)          -14.633      8.080  -1.811  0.08128 . 
-## log(hp)            -18.414      8.454  -2.178  0.03830 * 
-## log(wt)             -9.182      2.716  -3.380  0.00222 **
-## log(disp):log(hp)    2.671      1.586   1.684  0.10371   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##                                  Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                     2.820e+02  3.284e+03   0.086    0.933
+## cyl                            -1.917e+00  1.843e+00  -1.041    0.320
+## log(disp)                       1.611e+02  7.672e+02   0.210    0.838
+## log(hp)                        -2.244e+02  5.931e+02  -0.378    0.712
+## log(wt)                        -3.376e+03  3.715e+03  -0.909    0.383
+## drat                           -4.382e+01  8.129e+02  -0.054    0.958
+## vs                             -5.705e-02  2.553e+00  -0.022    0.983
+## am1                             1.387e+00  2.438e+00   0.569    0.581
+## gear                            9.303e-02  2.221e+00   0.042    0.967
+## carb                            7.606e-01  1.154e+00   0.659    0.523
+## log(disp):log(hp)               1.762e+00  1.378e+02   0.013    0.990
+## log(disp):log(wt)               4.152e+02  7.677e+02   0.541    0.599
+## log(hp):log(wt)                 8.292e+02  6.994e+02   1.186    0.261
+## log(disp):drat                 -5.429e+01  1.924e+02  -0.282    0.783
+## log(hp):drat                    6.235e+01  1.485e+02   0.420    0.683
+## log(wt):drat                    8.941e+02  9.566e+02   0.935    0.370
+## log(disp):log(hp):log(wt)      -1.128e+02  1.423e+02  -0.792    0.445
+## log(disp):log(hp):drat          4.344e-01  3.464e+01   0.013    0.990
+## log(disp):log(wt):drat         -1.016e+02  1.962e+02  -0.518    0.615
+## log(hp):log(wt):drat           -2.286e+02  1.832e+02  -1.248    0.238
+## log(disp):log(hp):log(wt):drat  2.985e+01  3.678e+01   0.812    0.434
 ## 
-## Residual standard error: 2.037 on 27 degrees of freedom
-## Multiple R-squared:  0.9005, Adjusted R-squared:  0.8858 
-## F-statistic: 61.12 on 4 and 27 DF,  p-value: 3.868e-13</code></pre>
+## Residual standard error: 1.938 on 11 degrees of freedom
+## Multiple R-squared:  0.9633, Adjusted R-squared:  0.8966 
+## F-statistic: 14.43 on 20 and 11 DF,  p-value: 3.082e-05</code></pre>
 <pre class="r"><code>prediction_3 &lt;- predict(model_3, newdata = mtcars)
-pred_diff_3 &lt;- with(mtcars, mpg - prediction_2)
-mean(pred_diff_2 ^ 2)</code></pre>
-<pre><code>## [1] 3.867535</code></pre>
+pred_diff_3 &lt;- with(mtcars, mpg - prediction_3)
+mean(pred_diff_3 ^ 2)</code></pre>
+<pre><code>## [1] 1.291573</code></pre>
 </div>
 
 

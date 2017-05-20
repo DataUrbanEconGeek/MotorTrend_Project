@@ -11,7 +11,7 @@ output:
 
 ### Background
 
-The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project are to answer if  an automatic or manual transmission better for MPG, and How different is the MPG between automatic manual transmission? 
+The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project is to create a prediction model for figuring out an automobile's fuel efficincy or how much miles per gallon(mpg) does the automobile get. 
 
 ### First
 
@@ -137,29 +137,34 @@ for(i in var_names5){
 grid.arrange(grobs = plot_list5, ncol = 2)
 ```
 
-These boxplots make it really easy to understand the trends of the explanitory variables verses miles per gallons. As cylenders increase, miles per gallons decrease. We see that automobiles with straight engines or have manual transmitions usually get better miles per gallon than automobiles with V engines or that have automatic trasmitions. Now that we have a good understanding of how miles per gallon interects with the explanitory variables on simple singular level, lets start to combine them. We'll use multiple regression to help us better understand how the interaction of mulitple explanitory variables effect miles per gallon. 
+These boxplots make it really easy to understand the trends of the explanitory variables verses miles per gallons. As cylenders increase, miles per gallons decrease. We see that automobiles with straight engines or have manual transmitions usually get better miles per gallon than automobiles with V engines or that have automatic trasmitions. Now that we have a good understanding of how miles per gallon interects with the explanitory variables on simple singular level, lets start to combine them. 
 
 ### Multiple Regression
 
 ```{r}
 
-model_1 <- lm(mpg ~ log(disp) * log(hp) + log(wt), data = mtcars)
+model_1 <- lm(mpg ~ disp + hp + wt, data = mtcars)
 summary(model_1)
-
-plot_1 <- ggplot(mtcars, aes(x = mpg, y = log(disp))) +
-                geom_point() +
-                geom_smooth(method = "lm")
-
-plot_1
+prediction_1 <- predict(model_1, newdata = mtcars)
+pred_diff_1 <- with(mtcars, mpg - prediction_1)
+mean(pred_diff_1 ^ 2)
 ```
 
+```{r}
+model_2 <- lm(mpg ~ log(disp) + log(hp) + log(wt), data = mtcars)
+summary(model_2)
+prediction_2 <- predict(model_2, newdata = mtcars)
+pred_diff_2 <- with(mtcars, mpg - prediction_2)
+mean(pred_diff_2 ^ 2)
+```
 
-
-
-
-
-
-
+```{r}
+model_3 <- lm(mpg ~ log(disp) * log(hp) + log(wt), data = mtcars)
+summary(model_3)
+prediction_3 <- predict(model_3, newdata = mtcars)
+pred_diff_3 <- with(mtcars, mpg - prediction_2)
+mean(pred_diff_2 ^ 2)
+```
 
 
 

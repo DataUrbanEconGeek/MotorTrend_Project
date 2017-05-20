@@ -291,6 +291,52 @@ summary(model_3)</code></pre>
 pred_diff_3 &lt;- with(mtcars, mpg - prediction_3)
 mean(pred_diff_3 ^ 2)</code></pre>
 <pre><code>## [1] 1.291573</code></pre>
+<pre class="r"><code>model_4 &lt;- lm(log(mpg) ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
+summary(model_4)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(mpg) ~ cyl + log(disp) * log(hp) * log(wt) * 
+##     drat + vs + am + gear + carb, data = mtcars)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.147960 -0.053937  0.007022  0.044039  0.154257 
+## 
+## Coefficients:
+##                                  Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                     7.494e+00  1.841e+02   0.041    0.968
+## cyl                            -9.752e-02  1.033e-01  -0.944    0.365
+## log(disp)                       7.129e+00  4.302e+01   0.166    0.871
+## log(hp)                        -8.263e+00  3.325e+01  -0.248    0.808
+## log(wt)                        -1.110e+02  2.083e+02  -0.533    0.605
+## drat                            1.056e+00  4.557e+01   0.023    0.982
+## vs                             -2.954e-02  1.431e-01  -0.206    0.840
+## am1                             1.123e-01  1.367e-01   0.821    0.429
+## gear                            7.277e-02  1.245e-01   0.584    0.571
+## carb                           -8.743e-03  6.469e-02  -0.135    0.895
+## log(disp):log(hp)               1.065e-01  7.727e+00   0.014    0.989
+## log(disp):log(wt)               1.191e+01  4.304e+01   0.277    0.787
+## log(hp):log(wt)                 2.930e+01  3.921e+01   0.747    0.471
+## log(disp):drat                 -2.442e+00  1.079e+01  -0.226    0.825
+## log(hp):drat                    2.003e+00  8.326e+00   0.241    0.814
+## log(wt):drat                    2.644e+01  5.363e+01   0.493    0.632
+## log(disp):log(hp):log(wt)      -3.812e+00  7.981e+00  -0.478    0.642
+## log(disp):log(hp):drat          3.270e-02  1.942e+00   0.017    0.987
+## log(disp):log(wt):drat         -2.369e+00  1.100e+01  -0.215    0.833
+## log(hp):log(wt):drat           -7.494e+00  1.027e+01  -0.730    0.481
+## log(disp):log(hp):log(wt):drat  9.167e-01  2.062e+00   0.444    0.665
+## 
+## Residual standard error: 0.1087 on 11 degrees of freedom
+## Multiple R-squared:  0.9527, Adjusted R-squared:  0.8668 
+## F-statistic: 11.09 on 20 and 11 DF,  p-value: 0.000114</code></pre>
+<pre class="r"><code>prediction_4 &lt;- predict(model_4, newdata = mtcars)
+pred_diff_4 &lt;- with(mtcars, log(mpg) - prediction_4)
+mean(pred_diff_4 ^ 2)</code></pre>
+<pre><code>## [1] 0.004059942</code></pre>
+<pre class="r"><code>prediction_5 &lt;- predict(model_4, newdata = mtcars)
+pred_diff_5 &lt;- with(mtcars, mpg - exp(prediction_5))
+mean(pred_diff_5 ^ 2)</code></pre>
+<pre><code>## [1] 1.54276</code></pre>
 </div>
 
 

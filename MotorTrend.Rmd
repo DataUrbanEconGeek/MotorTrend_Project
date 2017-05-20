@@ -166,5 +166,20 @@ pred_diff_3 <- with(mtcars, mpg - prediction_3)
 mean(pred_diff_3 ^ 2)
 ```
 
+```{r}
+model_4 <- lm(log(mpg) ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
+summary(model_4)
+prediction_4 <- predict(model_4, newdata = mtcars)
+pred_diff_4 <- with(mtcars, log(mpg) - prediction_4)
+mean(pred_diff_4 ^ 2)
+```
+
+```{r}
+prediction_5 <- predict(model_4, newdata = mtcars)
+pred_diff_5 <- with(mtcars, mpg - exp(prediction_5))
+mean(pred_diff_5 ^ 2)
+```
+
+
 
 

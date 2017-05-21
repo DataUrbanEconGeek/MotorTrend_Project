@@ -141,7 +141,7 @@ These boxplots make it really easy to understand the trends of the explanitory v
 
 ### Multiple Regression
 
-We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. calling a summary on it shows the intecept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared diference between the predicted outcomes and the actual miles per gallon observations. This number is how we'll gage the effectivnes of our model. The rule of thumb is the smaller the mean square difference is, the better model is. 
+We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. calling a summary on it shows the intecept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared diference between the predicted outcomes and the actual miles per gallon observations(the error). This number is how we'll gage the effectivnes of our model. The rule of thumb is the smaller the mean square error is, the better the model is. 
 
 ```{r}
 
@@ -152,7 +152,7 @@ pred_diff_1 <- with(mtcars, mpg - prediction_1)
 mean(pred_diff_1 ^ 2)
 ```
 
-
+We see that this gives us a mean squared error of 4.89. If we recall from our exploritory visualizations that taking the natural logarithm of the explanitor variable improved the correltion coefficent. Let's now edit our model to use the natural logarithms of the previouse explanitory variables. 
 
 ```{r}
 model_2 <- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)
@@ -162,6 +162,8 @@ pred_diff_2 <- with(mtcars, mpg - prediction_2)
 mean(pred_diff_2 ^ 2)
 ```
 
+Here we see that our model has improved. Our mean squared error drops to 3.59. Could we improve this model further. Next let's try to take the interaction among a few of our variables.
+
 ```{r}
 model_3 <- lm(mpg ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
 summary(model_3)
@@ -170,20 +172,15 @@ pred_diff_3 <- with(mtcars, mpg - prediction_3)
 mean(pred_diff_3 ^ 2)
 ```
 
-```{r}
-model_4 <- lm(log(mpg) ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
-summary(model_4)
-prediction_4 <- predict(model_4, newdata = mtcars)
-pred_diff_4 <- with(mtcars, log(mpg) - prediction_4)
-mean(pred_diff_4 ^ 2)
-```
+Our mean squared error has shrunk even more. This seems great, but we should note a few things. As we progress in decreasing the mean squared error with each new model, we have also decreased the degrees of freedom, and have inceared the multiple R-squared value making models that have very tight fits. We should realize that because of this tight fit we could possibly overfitting the models. Overfitting the models will not allow them to scale and preform well on new sets of data. 
 
-```{r}
-prediction_5 <- predict(model_4, newdata = mtcars)
-pred_diff_5 <- with(mtcars, mpg - exp(prediction_5))
-mean(pred_diff_5 ^ 2)
-```
+### Conclusion
 
+We have created a model the predicts an automobile's fuel efficency. We should understand the models limits though. The model may not work well with the introduction of new data due to it's tight fit. We should also take into account that the data-set represents a sample of cars from 1973-1974. Cars have become more fuel effecent over the years, so this model may work poorly at predicting the fuel efficency of say a Toyota Prius. I model made from a much larger and unbiase sample would be more accurate. 
+
+#### Project Source Code
+
+https://github.com/PunkFood-Disme/MotorTrend_Project
 
 
 

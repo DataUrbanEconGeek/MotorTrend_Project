@@ -11,7 +11,7 @@ output:
 
 ### Background
 
-The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project is to create a prediction model for figuring out an automobile's fuel efficincy or how much miles per gallon(mpg) does the automobile get. 
+The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project is to create a prediction model for figuring out an automobile's fuel efficiency or how much miles per gallon(mpg) does the automobile get. 
 
 ### First
 
@@ -21,7 +21,7 @@ We should take a look at the data. No need to load the data-set into the global 
 str(mtcars)
 ```
 
-We can see that all of the variables in the data-set are numeric. Transmission should be a cator though: 0 marks automatic, and 1 marks manual. We'll need to fix this. We also don't see the names of the automobiles. This is because they are the row names of the data-set. Let's take a look at this as well. 
+We can see that all of the variables in the data-set are numeric. Transmission should be a category though: 0 marks automatic, and 1 marks manual. We'll need to fix this. We also don't see the names of the automobiles. This is because they are the row names of the data-set. Let's take a look at this as well. 
 
 ```{r}
 mtcars$am <- factor(mtcars$am)
@@ -30,7 +30,7 @@ rownames(mtcars)
 
 ### Exploritory Visualization
 
-Lets take a look at some of the quantitative variabls with density plots overlayed with histrograms to get an idea of the distrobutions.
+Lets take a look at some of the quantitative variables with density plots overlay-ed with histograms to get an idea of the distributions.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -47,7 +47,7 @@ for(i in var_names){
 grid.arrange(grobs = plot_list, ncol = 2)
 ```
 
-Here we can see that most of the vairables are right skew. Displacement and rear axle ratio are distincivly bimodal. The other vairiabls are closer to being unimodal. We should also take note that there are outliers in each variable. It may be a good idea to look at the natural logarithm of some of these variabls. This will help bring in the outliers, and alter the distrobutions. 
+Here we can see that most of the variables are right skew. Displacement and rear axle ratio are distinctively bi-modal. The other variables are closer to being uni-modal. We should also take note that there are outliers in each variable. It may be a good idea to look at the natural logarithm of some of these variables. This will help bring in the outliers, and alter the distributions. 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 var_names2 <- c("mpg", "disp", "hp", "drat", "wt")
@@ -61,9 +61,9 @@ for(i in var_names2){
 grid.arrange(grobs = plot_list2, ncol = 2)
 ```
 
-The distrobution for miles per gallon and hourseporwer are much more evenly skewd. Weight is now skewed further to the left than originally. Displacement's distrobution is now reversed, and the rear axel ration has bearly changed. 
+The distribution for miles per gallon and horsepower are much more evenly skewed. Weight is now skewed further to the left than originally. Displacement's distribution is now reversed, and the rear axle ratio has barely changed. 
 
-Now it's time to look at how each variable effects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficent. The correlation coefficent is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative realtionship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coeffcent is calculated by dividing the covariance of the two variabls by the product of standard deviation of the variables. The equation is: $\text{r} = \frac{cov(A,B)}{ \left( S_A \cdot S_B \right)}$
+Now it's time to look at how each variable effects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficient. The correlation coefficient is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative relationship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coefficient is calculated by dividing the covariance of the two variables by the product of standard deviation of the variables. The equation is: $\text{r} = \frac{cov(A,B)}{ \left( S_A \cdot S_B \right)}$
 
 ```{r echo=FALSE}
 var_names3 <- c("disp", "hp")
@@ -123,8 +123,8 @@ for(i in var_names4){
 grid.arrange(grobs = plot_list4, ncol = 3)
 ```
 
-From the charts here we see that when the natural logarithm is applied to a variable the correlation is strengthened. The exception is with the rear axel ratio, where the results become worse by applying the natural logarithm. This shouldn't be surprising, we saw little change in the distrobution of the rear axle ratio when a natural logarith was applied as well. 
-It is now time to explore how miles per gallon interacts with catigoriagal variables. We'll use boxplots for this exploration. 
+From the charts here we see that when the natural logarithm is applied to a variable the correlation is strengthened. The exception is with the rear axle ratio, where the results become worse by applying the natural logarithm. This shouldn't be surprising, we saw little change in the distribution of the rear axle ratio when a natural logarithm was applied as well. 
+It is now time to explore how miles per gallon interacts with categorical variables. We'll use box-plots for this exploration. 
 
 ```{r echo=FALSE}
 var_names5 <- c("cyl", "vs", "am", "gear", "carb")
@@ -137,11 +137,11 @@ for(i in var_names5){
 grid.arrange(grobs = plot_list5, ncol = 2)
 ```
 
-These boxplots make it really easy to understand the trends of the explanitory variables verses miles per gallons. As cylenders increase, miles per gallons decrease. We see that automobiles with straight engines or have manual transmitions usually get better miles per gallon than automobiles with V engines or that have automatic trasmitions. Now that we have a good understanding of how miles per gallon interects with the explanitory variables on simple singular level, lets start to combine them. 
+These box-plots make it really easy to understand the trends of the explanatory variables verses miles per gallons. As cylinders increase, miles per gallons decrease. We see that automobiles with straight engines or have manual transmissions usually get better miles per gallon than automobiles with V engines or that have automatic transmissions. Now that we have a good understanding of how miles per gallon interacts with the explanatory variables on simple singular level, lets start to combine them. 
 
 ### Multiple Regression
 
-We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. calling a summary on it shows the intecept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared diference between the predicted outcomes and the actual miles per gallon observations(the error). This number is how we'll gage the effectivnes of our model. The rule of thumb is the smaller the mean square error is, the better the model is. 
+We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. calling a summary on it shows the intercept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared difference between the predicted outcomes and the actual miles per gallon observations(the error). This number is how we'll gauge the effectiveness of our model. The rule of thumb is the smaller the mean square error is, the better the model is. 
 
 ```{r}
 
@@ -152,7 +152,7 @@ pred_diff_1 <- with(mtcars, mpg - prediction_1)
 mean(pred_diff_1 ^ 2)
 ```
 
-We see that this gives us a mean squared error of 4.89. If we recall from our exploritory visualizations that taking the natural logarithm of the explanitor variable improved the correltion coefficent. Let's now edit our model to use the natural logarithms of the previouse explanitory variables. 
+We see that this gives us a mean squared error of 4.89. If we recall from our exploratory visualizations that taking the natural logarithm of the explanatory variable improved the correlation coefficient. Let's now edit our model to use the natural logarithms of the previous explanatory variables. 
 
 ```{r}
 model_2 <- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)
@@ -172,11 +172,12 @@ pred_diff_3 <- with(mtcars, mpg - prediction_3)
 mean(pred_diff_3 ^ 2)
 ```
 
-Our mean squared error has shrunk even more. This seems great, but we should note a few things. As we progress in decreasing the mean squared error with each new model, we have also decreased the degrees of freedom, and have inceared the multiple R-squared value making models that have very tight fits. We should realize that because of this tight fit we could possibly overfitting the models. Overfitting the models will not allow them to scale and preform well on new sets of data. 
+Our mean squared error has shrunk even more. This seems great, but we should note a few things. As we progress in decreasing the mean squared error with each new model, we have also decreased the degrees of freedom, and have increased the multiple R-squared value making models that have very tight fits. We should realize that because of this tight fit we could possibly over-fitting the models. Over-fitting the models will not allow them to scale and preform well on new sets of data. 
 
 ### Conclusion
 
-We have created a model the predicts an automobile's fuel efficency. We should understand the models limits though. The model may not work well with the introduction of new data due to it's tight fit. We should also take into account that the data-set represents a sample of cars from 1973-1974. Cars have become more fuel effecent over the years, so this model may work poorly at predicting the fuel efficency of say a Toyota Prius. I model made from a much larger and unbiase sample would be more accurate. 
+We have created a model the predicts an automobile's fuel efficiency. We should understand the models limits though. The model may not work well with the introduction of new data due to it's tight fit. We should also take into account that the data-set represents a sample of cars from 1973-1974. Cars have become more fuel efficient over the years, so this model may work poorly at predicting the fuel efficiency of say a Toyota Prius. I model made from a much larger and unbiased sample would be more accurate. 
+
 
 #### Project Source Code
 

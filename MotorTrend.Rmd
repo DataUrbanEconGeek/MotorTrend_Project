@@ -63,7 +63,7 @@ grid.arrange(grobs = plot_list2, ncol = 2)
 
 The distrobution for miles per gallon and hourseporwer are much more evenly skewd. Weight is now skewed further to the left than originally. Displacement's distrobution is now reversed, and the rear axel ration has bearly changed. 
 
-Now it's time to look at how each variable effects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficent. The correlation coefficent is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative realtionship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coeffcent is calculated by dividing the covariance of the two variabls by the product of standard deviation of the variables. The equation is: $\mathbf {r} = \frac{cov(A,B)}{ \left( S_A \times S_B \right)}$
+Now it's time to look at how each variable effects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficent. The correlation coefficent is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative realtionship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coeffcent is calculated by dividing the covariance of the two variabls by the product of standard deviation of the variables. The equation is: $\text{r} = \frac{cov(A,B)}{ \left( S_A \cdot S_B \right)}$
 
 ```{r echo=FALSE}
 var_names3 <- c("disp", "hp")
@@ -141,6 +141,8 @@ These boxplots make it really easy to understand the trends of the explanitory v
 
 ### Multiple Regression
 
+We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. calling a summary on it shows the intecept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared diference between the predicted outcomes and the actual miles per gallon observations. This number is how we'll gage the effectivnes of our model. The rule of thumb is the smaller the mean square difference is, the better model is. 
+
 ```{r}
 
 model_1 <- lm(mpg ~ cyl + disp + hp + drat + wt + vs + am + gear + carb, data = mtcars)
@@ -149,6 +151,8 @@ prediction_1 <- predict(model_1, newdata = mtcars)
 pred_diff_1 <- with(mtcars, mpg - prediction_1)
 mean(pred_diff_1 ^ 2)
 ```
+
+
 
 ```{r}
 model_2 <- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)

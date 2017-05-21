@@ -1,5 +1,5 @@
 ---
-title: "Motor Trend Project"
+title: "Predicting Fuel Efficiency of Automobiles"
 author: "Andrew Rosa"
 date: "11/12/2016"
 output: 

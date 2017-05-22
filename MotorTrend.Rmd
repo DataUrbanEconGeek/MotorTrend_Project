@@ -2,7 +2,7 @@
 title: "Predicting Fuel Efficiency of Automobiles"
 author: "Andrew Rosa"
 date: "11/12/2016"
-output: 
+output:
         html_document:
                 includes:
                         in_header: head.html
@@ -11,17 +11,17 @@ output:
 
 ### Background
 
-The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goals of this project is to create a prediction model for figuring out an automobile's fuel efficiency or how much miles per gallon(mpg) does the automobile get. 
+The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goal of this project is to create a prediction model for figuring out an automobile's fuel efficiency, or how many miles per gallon (mpg) the automobile gets.
 
 ### First
 
-We should take a look at the data. No need to load the data-set into the global environment, as R already has it. We'll use the function `str()` to get an overlook of the data.
+We should take a look at the data. No need to load the data-set into the global environment, as R already has it. We'll use the function `str()` to get an overview of the data.
 
 ```{r}
 str(mtcars)
 ```
 
-We can see that all of the variables in the data-set are numeric. Transmission should be a category though: 0 marks automatic, and 1 marks manual. We'll need to fix this. We also don't see the names of the automobiles. This is because they are the row names of the data-set. Let's take a look at this as well. 
+We can see that all of the variables in the data-set are numeric. Transmission should be a category, though: 0 marks automatic, and 1 marks manual. We'll need to fix this. We also don't see the names of the automobiles. This is because they are the row names of the data-set. Let's take a look at this as well.
 
 ```{r}
 mtcars$am <- factor(mtcars$am)
@@ -30,7 +30,7 @@ rownames(mtcars)
 
 ### Exploritory Visualization
 
-Lets take a look at some of the quantitative variables with density plots overlay-ed with histograms to get an idea of the distributions.
+Lets take a look at some of the quantitative variables with density plots overlaid with histograms to get an idea of the distributions.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -41,13 +41,13 @@ plot_list<- list()
 for(i in var_names){
         temp_plot <- ggplot(mtcars, aes_string(x = i)) +
                 geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
-                geom_histogram(aes(fill  = I("#F8766D"), y = ..density..), alpha = 0.9) 
+                geom_histogram(aes(fill  = I("#F8766D"), y = ..density..), alpha = 0.9)
         plot_list[[paste0(i, 1)]] <- temp_plot
 }
 grid.arrange(grobs = plot_list, ncol = 2)
 ```
 
-Here we can see that most of the variables are right skew. Displacement and rear axle ratio are distinctively bi-modal. The other variables are closer to being uni-modal. We should also take note that there are outliers in each variable. It may be a good idea to look at the natural logarithm of some of these variables. This will help bring in the outliers, and alter the distributions. 
+Here we can see that most of the variables are right skew. Displacement and rear axle ratio are distinctively bi-modal. The other variables are closer to being uni-modal. We should also take note that there are outliers in each variable. It may be a good idea to look at the natural logarithm of some of these variables. This will help bring in the outliers and alter the distributions.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 var_names2 <- c("mpg", "disp", "hp", "drat", "wt")
@@ -55,15 +55,15 @@ plot_list2<- list()
 for(i in var_names2){
         temp_plot <- ggplot(mtcars, aes_string(x = sprintf("log(%s)", i))) +
                 geom_density(fill = I("#00BFC4"), col = "#00BFC4", alpha = 0.5) +
-                geom_histogram(aes(fill  = I("#F8766D"), y = ..density..), alpha = 0.9) 
+                geom_histogram(aes(fill  = I("#F8766D"), y = ..density..), alpha = 0.9)
         plot_list2[[paste0(i, 1)]] <- temp_plot
 }
 grid.arrange(grobs = plot_list2, ncol = 2)
 ```
 
-The distribution for miles per gallon and horsepower are much more evenly skewed. Weight is now skewed further to the left than originally. Displacement's distribution is now reversed, and the rear axle ratio has barely changed. 
+The distributions for miles per gallon and horsepower are much more evenly skewed. Weight is now skewed further to the left than originally. Displacement's distribution is now reversed, and the rear axle ratio has barely changed.
 
-Now it's time to look at how each variable effects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficient. The correlation coefficient is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative relationship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coefficient is calculated by dividing the covariance of the two variables by the product of standard deviations of the variables. The equation is: $\text{r} = \frac{cov(A,B)}{ \left( S_A \cdot S_B \right)}$
+Now it's time to look at how each variable affects miles per gallon. We'll start with simple scatter plots and the associated correlation coefficient. The correlation coefficient is used to represent the linear dependence of two variables. The number can lie within the range of negative one to one. A negative one would indicate a perfect negative relationship, a zero indicates no correlation, and a positive one is a perfect positive relationship. The correlation coefficient is calculated by dividing the covariance of the two variables by the product of standard deviations of the variables. The equation is: $\text{r} = \frac{cov(A,B)}{ \left( S_A \cdot S_B \right)}$
 
 ```{r echo=FALSE}
 var_names3 <- c("disp", "hp")
@@ -72,19 +72,19 @@ for(i in var_names3){
        temp_plot <- ggplot(mtcars, aes_string(x = i)) +
                         geom_point(aes(y = mpg)) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(mtcars[,i], mtcars$mpg), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        temp_plot2 <- ggplot(mtcars, aes_string(x = i)) +
                         geom_point(aes(y = log(mpg))) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(mtcars[,i], log(mtcars$mpg)), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        temp_plot3 <- ggplot(mtcars, aes_string(x = sprintf("log(%s)", i))) +
                         geom_point(aes(y = log(mpg))) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(log(mtcars[,i]), log(mtcars$mpg)), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        plot_list3[[paste0(i, 1)]] <- temp_plot
@@ -101,19 +101,19 @@ for(i in var_names4){
        temp_plot <- ggplot(mtcars, aes_string(x = i)) +
                         geom_point(aes(y = mpg)) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(mtcars[,i], mtcars$mpg), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        temp_plot2 <- ggplot(mtcars, aes_string(x = i)) +
                         geom_point(aes(y = log(mpg))) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(mtcars[,i], log(mtcars$mpg)), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        temp_plot3 <- ggplot(mtcars, aes_string(x = sprintf("log(%s)", i))) +
                         geom_point(aes(y = log(mpg))) +
                         annotate("text", x=Inf, y = Inf,
-                                label = paste0("cor: ", 
+                                label = paste0("cor: ",
                                         round(cor(log(mtcars[,i]), log(mtcars$mpg)), 2)),
                                 vjust=1, hjust=1, col = "#F8766D")
        plot_list4[[paste0(i, 1)]] <- temp_plot
@@ -123,26 +123,26 @@ for(i in var_names4){
 grid.arrange(grobs = plot_list4, ncol = 3)
 ```
 
-From the charts here we see that when the natural logarithm of a variable is used the correlation is strengthened. The exception is with the rear axle ratio, where the results become worse by applying the natural logarithm. This shouldn't be surprising, we saw little change in the distribution of the rear axle ratio when a natural logarithm was applied as well. 
+From the charts here we see that when the natural logarithm of a variable is used the correlation is strengthened. The exception is with the rear axle ratio, where the results become worse by applying the natural logarithm. This shouldn't be surprising; we saw little change in the distribution of the rear axle ratio when a natural logarithm was applied as well.
 
-It is now time to explore how miles per gallon interacts with categorical variables. We'll use box-plots for this exploration. 
+It is now time to explore how miles per gallon interacts with categorical variables. We'll use box-plots for this exploration.
 
 ```{r echo=FALSE}
 var_names5 <- c("cyl", "vs", "am", "gear", "carb")
 plot_list5 <- list()
 for(i in var_names5){
         temp_plot <- ggplot(mtcars, aes_string(x = sprintf("factor(%s)", i), y = "mpg")) +
-                geom_boxplot() 
+                geom_boxplot()
         plot_list5[[paste0(i, 1)]] <- temp_plot
 }
 grid.arrange(grobs = plot_list5, ncol = 2)
 ```
 
-These box-plots make it really easy to understand the trends of the explanatory variables verses miles per gallons. As cylinders increase, miles per gallons decrease. We see that automobiles with straight engines or that have manual transmissions usually get better miles per gallon than automobiles with V engines or that have automatic transmissions. Now that we have a good understanding of how miles per gallon interacts with the explanatory variables on simple singular levels, lets start to combine them. 
+These box-plots make it really easy to understand the trends of the explanatory variables verses miles per gallons. As cylinders increase, miles per gallon decreases. We see that automobiles with straight engines or that have manual transmissions usually get better miles per gallon than automobiles with V engines or that have automatic transmissions. Now that we have a good understanding of how miles per gallon interacts with the explanatory variables on simple singular levels, lets start to combine them.
 
 ### Multiple Regression
 
-We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. Calling a summary the model shows the intercept and the slopes, it also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in it as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared difference between the predicted outcomes and the actual miles per gallon observations(the error). This number is how we'll gauge the effectiveness of our model. The rule of thumb is the smaller the mean square error is, the better the model. 
+We're going to use multiple linear regression for our predictive model. This model is defined as: $\text{Y} = \textit{b}_0 + \textit{b}_1 \cdot \textit{X}_{i1} + \textit{b}_2 \cdot \textit{X}_{i2} + \cdots + \textit{b}_{p} \textit{X}_{ip} + \epsilon_{i}$ where $\text{b}_0$ is the intercept and $\textit{b}_1$, $\textit{b}_2$, and so on are the slopes for each variable. R is great at creating linear regression models with ease. We'll simply use the `lm()` function and the calculations are done for us. Calling a summary, the model shows the intercept and the slopes. It also tells us the residual standard error, degrees of freedom, and the multiple R-squared value. For our first model we're going to add all of the variables in it as is. Next we will use the `predict()` function with the model on the original data-set. Then we'll figure out the mean squared difference between the predicted outcomes and the actual miles per gallon observations (the error). This number is how we'll gauge the effectiveness of our model. The rule of thumb is the smaller the mean squared error is, the better the model.
 
 ```{r}
 
@@ -153,7 +153,7 @@ pred_diff_1 <- with(mtcars, mpg - prediction_1)
 mean(pred_diff_1 ^ 2)
 ```
 
-We see that this gives us a mean squared error of 4.89. Recall from our exploratory visualizations that taking the natural logarithm of the explanatory variable improved the correlation coefficient. Let's now edit our model to use the natural logarithms of the previous explanatory variables. 
+We see that this gives us a mean squared error of 4.89. Recall from our exploratory visualizations that taking the natural logarithm of the explanatory variable improved the correlation coefficient. Let's now edit our model to use the natural logarithms of the previous explanatory variables.
 
 ```{r}
 model_2 <- lm(mpg ~ cyl + log(disp) + log(hp) + drat + log(wt) + vs + am + gear + carb, data = mtcars)
@@ -163,7 +163,7 @@ pred_diff_2 <- with(mtcars, mpg - prediction_2)
 mean(pred_diff_2 ^ 2)
 ```
 
-Here we see that our model has improved. Our mean squared error drops to 3.59. Could we improve this model further. Next let's try to take the interaction among a few of our variables.
+Here we see that our model has improved. Our mean squared error drops to 3.59. Could we improve this model further? Next, let's try to take the interaction among a few of our variables.
 
 ```{r}
 model_3 <- lm(mpg ~ cyl + log(disp) * log(hp) * log(wt) * drat + vs + am + gear + carb, data = mtcars)
@@ -173,16 +173,13 @@ pred_diff_3 <- with(mtcars, mpg - prediction_3)
 mean(pred_diff_3 ^ 2)
 ```
 
-Our mean squared error has shrunk even more. This seems great, but we should note a few things. As we progress in decreasing the mean squared error with each new model, we have also decreased the degrees of freedom, and have increased the multiple R-squared value making models that have very tight fits. We should realize that because of this tight fit we could possibly over-fitting the models. Over-fitting the models will not allow them to scale and preform well on new sets of data. 
+Our mean squared error has shrunk even more. This seems great, but we should note a few things. As we progress in decreasing the mean squared error with each new model, we have also decreased the degrees of freedom, and have increased the multiple R-squared value making models that have very tight fits. We should realize that because of this tight fit we could possibly be over-fitting the models. Over-fitting the models will not allow them to scale and perform well on new sets of data.
 
 ### Conclusion
 
-We have created a model that predicts an automobile's fuel efficiency. We should understand the models limits though. The model may not work well with the introduction of new data due to it's tight fit. We should also take into account that the data-set represents a sample of cars from 1973-1974. Cars have become more fuel efficient over the years, so this model may work poorly at predicting the fuel efficiency of say a Toyota Prius. A model made from a much larger and more unbiased sample would be more accurate. 
+We have created a model that predicts an automobile's fuel efficiency. We should understand the model's limits though. The model may not work well with the introduction of new data due to its tight fit. We should also take into account that the data-set represents a sample of cars from 1973-1974. Cars have become more fuel efficient over the years, so this model may work poorly at predicting the fuel efficiency of, say, a Toyota Prius. A model made from a much larger and more unbiased sample would be more accurate.
 
 
 #### Project Source Code
 
 https://github.com/PunkFood-Disme/MotorTrend_Project
-
-
-

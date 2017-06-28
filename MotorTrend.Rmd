@@ -9,6 +9,12 @@ output:
                 css: style.css
 ---
 
+#Predicting Fuel Efficiency of Automobiles {.title}
+
+## {.new}
+
+###### 11/12/2016 
+
 ### Background
 
 The 1974 issue of Motor Trend US magazine contained a data-set on the fuel consumption and ten different aspects of design and performance for 32 automobiles. The goal of this project is to create a prediction model for figuring out an automobile's fuel efficiency, or how many miles per gallon (mpg) the automobile gets.
